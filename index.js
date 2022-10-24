@@ -1,30 +1,17 @@
-import {from} from "rxjs";
+import {interval, timer} from "rxjs";
 
-const observer = {
-  next: val => console.log('next', val),
-  error: err => console.log('error', err),
-  complete: () => console.log('complete!')
-};
+// interval starts emitting after delay ex. after 1s every 1s emit
+const timer$ = interval(1000);
+timer$.subscribe(console.log);
 
-// arrays => observable
-const source$ = from([1, 2, 3, 4, 5]);
-source$.subscribe(observer);
-const sourceTwo$ = from('Hello');
-sourceTwo$.subscribe(observer);
+// timer - start immediately then emit every 1s
+const timer2$ = timer(0, 1000);
+timer2$.subscribe(console.log);
 
-//promises => observable
-const sourceThree$ = from(fetch('https://api.github.com/users/octocat'));
-sourceThree$.subscribe(observer);
+// timer - start after 2s then emit every 1s
+const timer3$ = timer(2000, 1000);
+timer3$.subscribe(console.log);
 
-//iterator => observable
-function* hello() {
-  yield 'Hello';
-  yield 'World';
-}
-
-const iterator = hello();
-console.log(iterator.next().value);
-console.log(iterator.next().value);
-
-const sourceFour$ = from(iterator);
-sourceFour$.subscribe(observer);
+// timer - emit value after 2s then stop
+const timer4$ = timer(2000);
+timer4$.subscribe(console.log);
