@@ -1,17 +1,23 @@
-import {interval, timer} from "rxjs";
+import {of, fromEvent} from 'rxjs';
+import {map, pluck, mapTo} from 'rxjs/operators';
 
-// interval starts emitting after delay ex. after 1s every 1s emit
-const timer$ = interval(1000);
-timer$.subscribe(console.log);
+of(1, 2, 3, 4, 5).pipe(
+    map(value => value * 10)
+).subscribe(console.log);
 
-// timer - start immediately then emit every 1s
-const timer2$ = timer(0, 1000);
-timer2$.subscribe(console.log);
+const keyup$ = fromEvent (document, 'keyup');
 
-// timer - start after 2s then emit every 1s
-const timer3$ = timer(2000, 1000);
-timer3$.subscribe(console.log);
+const keycode$ = keyup$.pipe(
+    map(event => event.code)
+);
+keycode$.subscribe(console.log);
 
-// timer - emit value after 2s then stop
-const timer4$ = timer(2000);
-timer4$.subscribe(console.log);
+const keycodeWithPluck$ = keyup$.pipe(
+    pluck('code')
+);
+keycodeWithPluck$.subscribe(console.log);
+
+const pressed$ = keyup$.pipe(
+    mapTo('Key Pressed!')
+);
+pressed$.subscribe(console.log);
