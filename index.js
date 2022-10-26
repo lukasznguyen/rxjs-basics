@@ -1,18 +1,33 @@
-import {of} from "rxjs";
-import {map, tap} from "rxjs/operators";
+import {fromEvent, of} from "rxjs";
+import {first, map, take} from "rxjs/operators";
 
 const numbers$ = of(1, 2, 3, 4, 5);
-
 numbers$.pipe(
-    tap(value => console.log('before', value)),
-    map(value => value * 10),
-    tap({
-      next: value => console.log('after', value),
-      complete: () => console.log('done!'),
-      error: error => {
-        //dp something
-      }
-    })
-).subscribe(value => {
-  console.log('from subscribe', value)
+    take(3)
+).subscribe({
+  next: console.log,
+  complete: () => console.log('Complete!')
+});
+
+const click$ = fromEvent(document, 'click');
+click$.pipe(
+    map(event => ({
+      x: event.clientX,
+      y: event.clientY
+    })),
+    take(1)
+).subscribe({
+  next: console.log,
+  complete: () => console.log('Complete!')
+});
+
+click$.pipe(
+    map(event => ({
+      x: event.clientX,
+      y: event.clientY
+    })),
+    first(({y}) => y > 200)
+).subscribe({
+  next: console.log,
+  complete: () => console.log('Complete!')
 });
