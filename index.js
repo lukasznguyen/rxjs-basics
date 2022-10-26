@@ -1,28 +1,22 @@
-import {from} from 'rxjs';
-import {scan, map} from "rxjs/operators";
+import {interval} from "rxjs";
+import {filter, mapTo, scan} from "rxjs/operators";
 
-const numbers = [1, 2, 3, 4, 5];
+// elements refs
+const countdown = document.getElementById('countdown');
+const message = document.getElementById('message');
 
-from(numbers).pipe(
-    scan((accumulator, currentValue) => {
-      return accumulator + currentValue;
-    }, 0)
-).subscribe(console.log);
+// stream
+const counter$ = interval(1000);
 
-const user = [
-  {name: 'Brain', loggedIn: false, token: null},
-  {name: 'Brain', loggedIn: true, token: 'abc'},
-  {name: 'Brain', loggedIn: true, token: '123'},
-];
-
-const state$ = from(user).pipe(
-    scan((accumulator, currentValue) => {
-      return { ...accumulator, ...currentValue};
-    }, {})
-);
-
-const name$ = state$.pipe(
-    map(state => state.name)
-);
-
-name$.subscribe(console.log);
+counter$.pipe(
+    mapTo(-1),
+    scan((accumulator, current) => {
+      return accumulator - 1;
+    }, 10),
+    filter(value => value >= 0)
+).subscribe(value => {
+  countdown.innerHTML = value;
+  if (!value) {
+    message.innerHTML = 'Liftoff!!';
+  }
+});
