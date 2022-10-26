@@ -1,9 +1,8 @@
-import {interval, fromEvent} from "rxjs";
-import {takeUntil} from "rxjs/operators";
+import {of} from "rxjs";
+import {distinctUntilChanged} from "rxjs/operators";
 
-const counter$ = interval(1000);
-const click$ = fromEvent(document, 'click');
-
-counter$.pipe(
-    takeUntil(click$)
+const numbers$ = of(1, 1, 2, 3, 3, 3, 4, 5);
+//compare only with previous value + checks by triple equals
+numbers$.pipe(
+    distinctUntilChanged()
 ).subscribe(console.log);
