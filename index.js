@@ -1,12 +1,9 @@
 import {fromEvent, interval} from "rxjs";
-import {mergeMap, takeUntil} from "rxjs/operators";
+import {switchMap} from "rxjs/operators";
 
-const mousedown$ = fromEvent(document, 'mousedown');
-const mouseup$ = fromEvent(document, 'mouseup');
 const intervals$ = interval(1000);
+const clicks$ = fromEvent(document, 'click');
 
-mousedown$.pipe(
-    mergeMap(() => intervals$.pipe(
-        takeUntil(mouseup$)
-    ))
+clicks$.pipe(
+    switchMap(() => intervals$)
 ).subscribe(console.log);
