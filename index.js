@@ -1,15 +1,12 @@
-import {empty, interval} from 'rxjs';
-import {concat, delay, startWith} from "rxjs/operators";
+import {fromEvent, merge} from "rxjs";
 
-const interval$ = interval(1000);
-const delayed$ = empty().pipe(delay(1000));
+const keyup$ = fromEvent(document, 'keyup');
+const click$ = fromEvent(document, 'click');
 
-delayed$.pipe(
-    concat(
-        delayed$.pipe(startWith('3....')),
-        delayed$.pipe(startWith('2....')),
-        delayed$.pipe(startWith('1....')),
-        delayed$.pipe(startWith('Go!'))
-    ),
-    startWith('Get ready!')
+keyup$.subscribe(console.log);
+click$.subscribe(console.log);
+
+merge(
+    keyup$,
+    click$
 ).subscribe(console.log);
