@@ -1,9 +1,9 @@
 import {fromEvent, interval} from "rxjs";
-import {switchMap} from "rxjs/operators";
+import {concatMap, take} from "rxjs/operators";
 
 const intervals$ = interval(1000);
 const clicks$ = fromEvent(document, 'click');
 
 clicks$.pipe(
-    switchMap(() => intervals$)
+    concatMap(() => intervals$.pipe(take(3)))
 ).subscribe(console.log);
