@@ -1,9 +1,36 @@
-import {fromEvent, interval} from "rxjs";
-import {exhaustMap, take} from "rxjs/operators";
+import {fromEvent, timer} from "rxjs";
+import {ajax} from "rxjs/ajax";
+import {
+  exhaustMap,
+  finalize,
+  pluck,
+  switchMapTo,
+  takeUntil,
+  tap
+} from "rxjs/operators";
 
-const intervals$ = interval(1000);
-const clicks$ = fromEvent(document, 'click');
+// elements
+const startButton = document.getElementById('start');
+const stopButton = document.getElementById('stop');
+const pollingStatus = document.getElementById('polling-status');
+const dogImage = document.getElementById('dog');
 
-clicks$.pipe(
-    exhaustMap(() => intervals$.pipe(take(3)))
-).subscribe(console.log);
+//streams
+const startClick$ = fromEvent(startButton, 'click');
+const stopClick$ = fromEvent(stopButton, 'click');
+
+startClick$.pipe(
+    // map to interval
+    exhaustMap(() => timer(0, 5000).pipe(
+        tap(() => pollingStatus.innerHTML = 'Active'),
+        switchMapTo(
+            ajax.getJSON(
+                'https://random.dog/woof.json'
+            ).pipe(
+                pluck('url')
+            )
+        ),
+        takeUntil(stopClick$),
+        finalize(() => pollingStatus.innerHTML = 'Stopped')
+    ))
+).subscribe(url => dogImage.src = url);

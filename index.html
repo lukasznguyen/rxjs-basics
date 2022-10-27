@@ -1,19 +1,29 @@
 <html>
-  <head>
-    <title>RxJS Starter - Ultimate Courses</title>
-    <link href="styles.css" rel="stylesheet" />
-  </head>
-  <body>
-    <header class="header">
-      <div class="logo">
-        <div class="logo-ultimate"></div>
-        <p class="logo-name">Ultimate Courses<span>&trade;</span></p>
-      </div>
-    </header>
-    <div id="app">
-      <h1>Ultimate RxJS</h1>
-    </div>
-    <script src="index.js"></script>
+<head>
+  <title>RxJS Starter - Ultimate Courses</title>
+  <link href="styles.css" rel="stylesheet"/>
+</head>
+<body>
+<header class="header">
+  <div class="logo">
+    <div class="logo-ultimate"></div>
+    <p class="logo-name">Ultimate Courses<span>&trade;</span></p>
+  </div>
+</header>
+<div id="app">
+  <h1>Ultimate RxJS</h1>
+  <p>
+    Starts polling to request random <a href="https://random.dog/">dog</a> images!
+  </p>
+  <p>Polling status:
+    <span id="polling-status">Stopped</span>
+  </p>
+  <button id="start">Start Polling</button>
+  <button id="stop">Stop Polling</button>
+  <img style="max-width: 400px; max-height:400px;" id="dog"
+       src="https://random.dog/09584fb1-baa4-45b7-a801-cff37a0a4c74.jpg" alt="dog!"/>
+</div>
+<script src="index.js"></script>
 
-  </body>
+</body>
 </html>
